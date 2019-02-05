@@ -285,6 +285,11 @@ def processDirectory(url, progress, params, use_cache_data=False):
             item_details.art["poster"] = item_details.art["tvshow.poster"]
             item_details.art["thumb"] = item_details.art["tvshow.poster"]
 
+        if settings.getSetting('show_unaired_episodes') == "true":
+            unaired = ''
+        else:
+            unaired = '&IsVirtualUnAired=false&IsMissing=false'
+
         if item_details.is_folder is True:
             if item_details.item_type == "Series":
                 u = ('{server}/emby/Shows/' + item_details.id +
@@ -297,17 +302,13 @@ def processDirectory(url, progress, params, use_cache_data=False):
                 u = ('{server}/emby/Shows/' + item_details.series_id +
                      '/Episodes'
                      '?userId={userid}' +
-                     '&seasonId=' + item_details.id +
-                     '&IsVirtualUnAired=false' +
-                     '&IsMissing=false' +
+                     '&seasonId=' + item_details.id + unaired +
                      '&Fields={field_filters}' +
                      '&format=json')
 
             else:
                 u = ('{server}/emby/Users/{userid}/items' +
-                     '?ParentId=' + item_details.id +
-                     '&IsVirtualUnAired=false' +
-                     '&IsMissing=false' +
+                     '?ParentId=' + item_details.id + unaired +
                      '&Fields={field_filters}' +
                      '&format=json')
 
